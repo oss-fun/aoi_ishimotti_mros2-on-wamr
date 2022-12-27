@@ -1,0 +1,3 @@
+[submodule "mros2-wasm"]
+	path = mros2-wasm
+	url = git@github.com:Sorasky4/mros2-wasm.git
