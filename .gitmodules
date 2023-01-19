@@ -2,3 +2,6 @@
 	path = mros2-wasm
 	url = git@github.com:Sorasky4/mros2-wasm.git
 	branch = main
+[submodule "wasm-micro-runtime"]
+	path = wasm-micro-runtime
+	url = git@github.com:bytecodealliance/wasm-micro-runtime.git
