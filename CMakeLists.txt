@@ -95,7 +95,7 @@ ExternalProject_Add(lwip-wasm-project
   UPDATE_COMMAND    ""
   PATCH_COMMAND     ""
   CONFIGURE_COMMAND ${CMAKE_COMMAND} -E copy
-                      $ENV{HOME}/wasm-micro-runtime-WAMR-1.1.2/core/iwasm/libraries/lib-socket/inc/wasi_socket_ext.h
+                      ${CMAKE_CURRENT_SOURCE_DIR}/wasm-micro-runtime/core/iwasm/libraries/lib-socket/inc/wasi_socket_ext.h
                       ${CMAKE_CURRENT_SOURCE_DIR}/library/include/wasi_socket_ext.h
                     && ${CMAKE_COMMAND}
                       -DWASI_SDK_PREFIX=${WASI_SDK_DIR}
@@ -112,7 +112,7 @@ ExternalProject_Add(cmsis-wasm-project
   UPDATE_COMMAND    ""
   PATCH_COMMAND     ""
   CONFIGURE_COMMAND ${CMAKE_COMMAND} -E copy
-                      $ENV{HOME}/wasm-micro-runtime-WAMR-1.1.2/wamr-sdk/app/libc-builtin-sysroot/include/pthread.h
+                      ${CMAKE_CURRENT_SOURCE_DIR}/wasm-micro-runtime/wamr-sdk/app/libc-builtin-sysroot/include/pthread.h
                       ${CMAKE_CURRENT_SOURCE_DIR}/library/include/pthread.h
                     && ${CMAKE_COMMAND}
                       -DWASI_SDK_PREFIX=${WASI_SDK_DIR}
@@ -178,7 +178,7 @@ endif ()
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -Wformat -Wformat-security")
 
 # build vmlib static lib
-set(WAMR_ROOT_DIR $ENV{HOME}/wasm-micro-runtime-WAMR-1.1.2)
+set(WAMR_ROOT_DIR ${CMAKE_CURRENT_LIST_DIR}/wasm-micro-runtime)
 include (${WAMR_ROOT_DIR}/build-scripts/runtime_lib.cmake)
 add_library(vmlib ${WAMR_RUNTIME_LIB_SOURCE})
 
