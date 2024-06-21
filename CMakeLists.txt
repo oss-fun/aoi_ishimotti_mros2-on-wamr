@@ -75,19 +75,21 @@ message(STATUS "WASI_SYS_ROOT is ${WASI_SYS_ROOT}")
 
 include(ExternalProject)
 
-ExternalProject_Add(mros2-wasm-project
-  SOURCE_DIR        ${CMAKE_CURRENT_SOURCE_DIR}/mros2-wasm
+ExternalProject_Add(cmsis-wasm-project
+  SOURCE_DIR        ${CMAKE_CURRENT_SOURCE_DIR}/mros2-wasm/cmsis-wasm
   UPDATE_COMMAND    ""
   PATCH_COMMAND     ""
-  CONFIGURE_COMMAND ${CMAKE_COMMAND}
+  CONFIGURE_COMMAND ${CMAKE_COMMAND} -E copy
+                      ${CMAKE_CURRENT_SOURCE_DIR}/wasm-micro-runtime/wamr-sdk/app/libc-builtin-sysroot/include/pthread.h
+                      ${CMAKE_CURRENT_SOURCE_DIR}/library/include/pthread.h
+                    && ${CMAKE_COMMAND}
                       -DWASI_SDK_PREFIX=${WASI_SDK_DIR}
                       -DCMAKE_TOOLCHAIN_FILE=${WASI_TOOLCHAIN_FILE}
                       -DCMAKE_SYSROOT=${WASI_SYS_ROOT}
-                      ${CMAKE_CURRENT_SOURCE_DIR}/mros2-wasm
-                      -D CMAKE_APPNAME=${CMAKE_APPNAME}
+                      -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_SOURCE_DIR}/mros2-wasm/cmsis-wasm/public/include
+                      ${CMAKE_CURRENT_SOURCE_DIR}/mros2-wasm/cmsis-wasm
   BUILD_COMMAND     ${CMAKE_COMMAND} --build .
-  INSTALL_COMMAND   ${CMAKE_COMMAND} -E copy
-                    ${CMAKE_BINARY_DIR}/mros2-wasm-project-prefix/src/mros2-wasm-project-build/app.wasm ${CMAKE_BINARY_DIR}
+  INSTALL_COMMAND   make install
 )
 
 ExternalProject_Add(lwip-wasm-project
@@ -107,21 +109,19 @@ ExternalProject_Add(lwip-wasm-project
   INSTALL_COMMAND   make install
 )
 
-ExternalProject_Add(cmsis-wasm-project
-  SOURCE_DIR        ${CMAKE_CURRENT_SOURCE_DIR}/mros2-wasm/cmsis-wasm
+ExternalProject_Add(mros2-wasm-project
+  SOURCE_DIR        ${CMAKE_CURRENT_SOURCE_DIR}/mros2-wasm
   UPDATE_COMMAND    ""
   PATCH_COMMAND     ""
-  CONFIGURE_COMMAND ${CMAKE_COMMAND} -E copy
-                      ${CMAKE_CURRENT_SOURCE_DIR}/wasm-micro-runtime/wamr-sdk/app/libc-builtin-sysroot/include/pthread.h
-                      ${CMAKE_CURRENT_SOURCE_DIR}/library/include/pthread.h
-                    && ${CMAKE_COMMAND}
+  CONFIGURE_COMMAND ${CMAKE_COMMAND}
                       -DWASI_SDK_PREFIX=${WASI_SDK_DIR}
                       -DCMAKE_TOOLCHAIN_FILE=${WASI_TOOLCHAIN_FILE}
                       -DCMAKE_SYSROOT=${WASI_SYS_ROOT}
-                      -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_SOURCE_DIR}/mros2-wasm/cmsis-wasm/public/include
-                      ${CMAKE_CURRENT_SOURCE_DIR}/mros2-wasm/cmsis-wasm
+                      ${CMAKE_CURRENT_SOURCE_DIR}/mros2-wasm
+                      -D CMAKE_APPNAME=${CMAKE_APPNAME}
   BUILD_COMMAND     ${CMAKE_COMMAND} --build .
-  INSTALL_COMMAND   make install
+  INSTALL_COMMAND   ${CMAKE_COMMAND} -E copy
+                    ${CMAKE_BINARY_DIR}/mros2-wasm-project-prefix/src/mros2-wasm-project-build/app.wasm ${CMAKE_BINARY_DIR}
 )
 
 ############################################
